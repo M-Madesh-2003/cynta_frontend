@@ -24,8 +24,8 @@ socket.on("vendorDetails", (data) => {
     addVendorMarker(data);
     autoDrawRouteToVendor(data);
   } else {
-   alert("Invalid vendor data");
-   console.log(data)
+    alert("Invalid vendor data");
+    console.log(data);
   }
 });
 
@@ -313,6 +313,43 @@ function addVendorMarker(vendor) {
   });
 
   vendorMarkers.push(vendorMarker);
+
+  const infoWindowContent = (
+   `<div>
+      <h3>
+        ${vendor.companyName} (${vendor.companyType})
+      </h3>
+      <p>
+        <b>Name:</b> ${vendor.name}
+      </p>
+      <p>
+        <b>Contact:</b> ${vendor.contact}
+      </p>
+      <p>
+        <b>Email:</b> ${vendor.email}
+      </p>
+      <p>
+        <b>Address:</b> ${vendor.address}
+      </p>
+    </div>`
+  );
+  const infoWindow = new google.maps.InfoWindow({
+    content: infoWindowContent,
+  });
+
+  vendorMarker.addListener("mouseover", () => {
+    infoWindow.open(map, vendorMarker);
+    trackingVendor = vendor;
+  });
+
+  vendorMarker.addListener("mouseout", () => {
+    infoWindow.close();
+  });
+
+ /*  vendorMarker.addListener("click", () => {
+    drawRoute(lastLocation, vendor.location, true);
+    trackingVendor = vendor;
+  }); */
 }
 
 function clearVendorMarkers() {
