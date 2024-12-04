@@ -12,6 +12,7 @@ socket.on("connect", () => {
 });
 
 socket.on("vendorDetails", (data) => {
+  console.log(data)
   clearVendorMarkers();
   resetTracking();
 
@@ -594,7 +595,6 @@ function submitVendorDetails(e) {
 
   getUserLocation()
     .then((location) => {
-      console.log("loc", location);
       const vendorDetails = {
         name,
         email,
