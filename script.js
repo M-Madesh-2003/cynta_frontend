@@ -3,7 +3,7 @@ let map;
 let userMarker;
 let trackingVendor = null;
 let currentRoute = null;
-const socket = io("http://localhost:5000/");
+const socket = io("https://cynta-backend.onrender.com/");
 let vendorMarkers = [];
 
 // Socket Connection
@@ -381,14 +381,19 @@ function addVendorMarker(vendor) {
   });
 
   vendorMarker.addListener("click", () => {
-    infoWindow.open(map, vendorMarker);
     drawRoute(lastLocation, vendor.location);
     trackingVendor = vendor;
   });
+  
+  vendorMarker.addListener("mouseover", () => {
+    infoWindow.open(map, vendorMarker);
 
-  vendorMarker.addListener("dblclick", () => {
+  })
+
+  vendorMarker.addListener("mouseout", () => {
     infoWindow.close();
-  });
+
+  })
 }
 
 function clearVendorMarkers() {
