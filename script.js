@@ -15,10 +15,10 @@ let customerWatcher = null;
 let vendorWatcher = null;
 
 socket.on("vendorDetails", (data) => {
-  console.log(data)
+  console.log(data);
   clearVendorMarkers();
   resetTracking();
-  
+
   if (Array.isArray(data)) {
     data.forEach((vendor) => addVendorMarker(vendor));
   } else if (data.location) {
@@ -101,96 +101,105 @@ function initializeMap() {
           center: { lat, lng },
           zoom: 15,
           streetViewControl: false,
-          style: [
+          styles: [
             {
-              featureType: 'poi',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
+              featureType: "poi.business",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
             },
             {
-              featureType: 'poi',
-              elementType: 'geometry',
-              stylers: [{ color: '#E8E9ED' }],
+              featureType: "poi.park",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
             },
             {
-              featureType: 'poi',
-              elementType: 'labels.icon',
-              stylers: [{ visibility: 'off' }],
+              featureType: "poi.place_of_worship",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
             },
             {
-              featureType: 'poi.park',
-              elementType: 'geometry',
-              stylers: [{ color: '#C8FACC' }],
+              featureType: "poi.school",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
             },
             {
-              featureType: 'transit',
-              elementType: 'labels.icon',
-              stylers: [{ visibility: 'off' }],
+              featureType: "poi",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
             },
             {
-              featureType: 'road.local',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
+              featureType: "road",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
             },
             {
-              featureType: 'road.local',
-              elementType: 'geometry',
-              stylers: [{ color: '#DBE0E8' }],
+              featureType: "administrative",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
             },
             {
-              featureType: 'road.highway.controlled_access',
-              elementType: 'geometry',
-              stylers: [{ color: '#FFFFFF' }],
+              featureType: "landscape",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
             },
             {
-              featureType: 'administrative.neighborhood',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
+              featureType: "administrative.country",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
             },
             {
-              featureType: 'administrative.locality',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
+              featureType: "administrative.province",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
             },
             {
-              featureType: 'administrative.locality',
-              elementType: 'geometry',
-              stylers: [{ color: '#E8E9ED' }],
-            },
-            {
-              featureType: 'administrative.province',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'transit.line',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'transit.station',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'labels.text.fill',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'water',
-              elementType: 'labels.text.fill',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'landscape.man_made',
-              elementType: 'labels.text',
-              stylers: [{ visibility: 'off' }],
+              featureType: "administrative.locality",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
             },
           ],
         });
@@ -299,7 +308,7 @@ function startVendorTracking() {
           location: { latitude: lat, longitude: lng },
         };
 
-        console.log('location',lat,lng)
+        console.log("location", lat, lng);
 
         socket.emit("vendorDetails", vendorDetails);
       },
@@ -328,6 +337,7 @@ function getDistance(loc1, loc2) {
 }
 
 function addVendorMarker(vendor) {
+  console.log('methods', vendor)
   if (!vendor || !vendor.location) return;
 
   const position = new google.maps.LatLng(
@@ -384,16 +394,14 @@ function addVendorMarker(vendor) {
     drawRoute(lastLocation, vendor.location);
     trackingVendor = vendor;
   });
-  
+
   vendorMarker.addListener("mouseover", () => {
     infoWindow.open(map, vendorMarker);
-
-  })
+  });
 
   vendorMarker.addListener("mouseout", () => {
     infoWindow.close();
-
-  })
+  });
 }
 
 function clearVendorMarkers() {
@@ -429,7 +437,7 @@ function startTracking() {
             location: lastLocation,
           });
 
-       /*    if (trackingVendor) {
+          /*    if (trackingVendor) {
             drawRoute(lastLocation, trackingVendor.location);
           } */
         }
@@ -538,7 +546,7 @@ function submitVendorDetails(e) {
       };
       console.log("vend", vendorDetails);
       socket.emit("vendorDetails", vendorDetails);
-      startVendorTracking()
+      startVendorTracking();
       const vendorForm = document.getElementById("vendor-form-container");
       vendorForm.style.display = "none";
     })

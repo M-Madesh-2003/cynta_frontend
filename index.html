@@ -10,216 +10,589 @@
         padding: 0;
       }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuPkuC7JwEWHwo0r4rXjxLIhwaeoykkGw"></script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuPkuC7JwEWHwo0r4rXjxLIhwaeoykkGw&libraries"
+    ></script>
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
   </head>
   <body>
-    <div id="vendor-feature-container" style="font-family: 'Manrope', sans-serif; color: black;">
+    <div
+      id="vendor-feature-container"
+      style="font-family: 'Manrope', sans-serif; color: black"
+    >
+      <div
+        id="find-vendor"
+        style="position: fixed; bottom: 10px; right: 15px; cursor: pointer"
+        onclick="openVendorFeature()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="46"
+          height="46"
+          viewBox="0 0 46 46"
+        >
+          <g
+            id="Group_22749"
+            data-name="Group 22749"
+            transform="translate(-2068 -281)"
+          >
+            <circle
+              id="Ellipse_243"
+              data-name="Ellipse 243"
+              cx="23"
+              cy="23"
+              r="23"
+              transform="translate(2068 281)"
+              fill="#2078ff"
+            />
+            <path
+              id="Path_16673"
+              data-name="Path 16673"
+              d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,1,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8,8,8,0,0,1-8,8Z"
+              transform="translate(2079.033 292.032)"
+              fill="#f0f5ff"
+            />
+            <path
+              id="Path_16676"
+              data-name="Path 16676"
+              d="M118.851,6.419a.621.621,0,0,0,.533-.3c.8-1.312,1.758-3.042,1.758-3.829a2.291,2.291,0,0,0-4.583,0c0,.787.956,2.517,1.758,3.829A.621.621,0,0,0,118.851,6.419Zm-.921-4.285a.921.921,0,1,1,.921.921A.922.922,0,0,1,117.93,2.134Z"
+              transform="translate(1969.857 298.581)"
+              fill="#f0f5ff"
+            />
+          </g>
+        </svg>
+      </div>
 
       <div
-         id="find-vendor"
-         style="position: fixed; bottom: 10px; right: 15px; cursor: pointer"
-         onclick="openVendorFeature()"
-       >
-         <svg
-           xmlns="http://www.w3.org/2000/svg"
-           width="46"
-           height="46"
-           viewBox="0 0 46 46"
-         >
-           <g
-             id="Group_22749"
-             data-name="Group 22749"
-             transform="translate(-2068 -281)"
-           >
-             <circle
-               id="Ellipse_243"
-               data-name="Ellipse 243"
-               cx="23"
-               cy="23"
-               r="23"
-               transform="translate(2068 281)"
-               fill="#2078ff"
-             />
-             <path
-               id="Path_16673"
-               data-name="Path 16673"
-               d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,1,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8,8,8,0,0,1-8,8Z"
-               transform="translate(2079.033 292.032)"
-               fill="#f0f5ff"
-             />
-             <path
-               id="Path_16676"
-               data-name="Path 16676"
-               d="M118.851,6.419a.621.621,0,0,0,.533-.3c.8-1.312,1.758-3.042,1.758-3.829a2.291,2.291,0,0,0-4.583,0c0,.787.956,2.517,1.758,3.829A.621.621,0,0,0,118.851,6.419Zm-.921-4.285a.921.921,0,1,1,.921.921A.922.922,0,0,1,117.93,2.134Z"
-               transform="translate(1969.857 298.581)"
-               fill="#f0f5ff"
-             />
-           </g>
-         </svg>
-       </div>
- 
-       <div id="vendor-popup" style="width: 250px; max-height: 200px; color: #000000; background-color: white; border-radius: 12px; box-shadow: 3px 3px 6px #0000001F; border: 1px solid #ddd; position: fixed; bottom: 10px; right: 10px; display: none; flex-direction: column; align-items: center; padding: 15px;">
-         <p style="font-size: 14px; font-weight: bold; margin: 0px; padding: 0px;">Would you like to search near my vendor?</p>
-         <div class="btn-section" style="display: flex; justify-content: space-evenly; width: 100%; margin-top: 10px; gap: 20px; font-size: 12px;">
-           <button style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #5054DD; color: white;" onclick="openForm()">Yes</button>
-           <button style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #F5F5F5;" onclick="closePopup()">No</button>
-         </div>
-       </div>
-   
-       <div id="usertype-selection-container" style=" display: none; flex-direction: column; width: 250px; height: 110px; background-color: white; border-radius: 12px; box-shadow: 3px 3px 6px #0000001F; border: 1px solid #ddd; position: fixed; bottom: 10px; right: 10px; padding: 15px; justify-content: space-between;">
-         <p style="font-size: 14px; font-weight: bold; margin: 0px; padding: 0px;">Select your user category</p>
-         <div class="radio-btn-container" style=" display: flex; gap: 70px;">
-           <div class="usertype-radio-btn" style=" display: flex; gap:3px">
-             <input type="radio" id="customer" name="usertype" value="customer" required style="width: 12px; height: 16px;" />
-             <label for="customer" style="font-weight: 500; font-size: 12px;">Customer</label>
-           </div>
-           <div class="usertype-radio-btn" style=" display: flex; gap: 3px">
-             <input type="radio" id="vendor" name="usertype" value="vendor" required style="width: 12px; height: 16px;" />
-             <label for="vendor" style="font-weight: 500; font-size: 12px;">Vendor</label>
-           </div>
-         </div>
-   
-         <div class="btn-section" style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; gap: 20px;">
-           <button  style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #5054DD; color: white;" onclick="submitUserType()">Submit</button>
-           <button style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #F5F5F5;"  onclick="closeUserType()">Cancel</button>
-         </div>
-       </div>
-   
-       <div id="customer-form-container" style="display: none; position: fixed; bottom: 10px; right: 10px; background-color: white; border-radius: 15px; box-shadow: 3px 3px 6px #0000001F; border: 1px solid #ddd; max-width: 200px; max-height: 400px; padding: 15px; font-size: 14px;">
-         <button class="form-cancel-btn" style="position: absolute; top: 6px; right: 6px; border-radius: 100%; height: 25px; width: 25px; cursor: pointer; border: 1px solid #D4D4D4; background-color: white;" onclick="closeForm('customer')">
-           x
-         </button>
-         <p class="form-title" style="margin: 0px; font-weight: bold; font-size: 14px; padding: 0px;">Enter customer details</p>
-         <form style=" display: flex; flex-direction: column; gap: 10px; font-size: 12px; font-weight: 400; margin-top: 10px;" onsubmit="submitUserDetails(event)">
-           <div>
-             <label for="username" style="font-size: 12px">Enter your Name</label>
-             <input
-               type="text"
-               id="username"
-               name="username"
-               style="border-radius: 6px; border: 1px solid #DBDBDB; height: 20px; margin-top: 2px; width: 100%; padding-left: 5px;"
-               onfocus="this.style.outline = '1px solid #5054DD'"
-               onblur="this.style.outline = 'none';"
-               required
-             />
-           </div>
-           <div>
-             <label for="useremail">Enter your Email</label>
-             <input
-               type="email"
-               id="useremail"
-               name="useremail"
-               style="border-radius: 6px; border: 1px solid #DBDBDB; height: 20px; margin-top: 2px; width: 100%; padding-left: 5px;"
-               onfocus="this.style.outline = '1px solid #5054DD'"
-               onblur="this.style.outline = 'none';"
-               required
-             />
-           </div>
-           <div>
-             <label for="choose-vendor">Select Company Type</label>
-             <select name="choose-vendor" id="choose-vendor" style="border-radius: 6px; border: 1px solid #DBDBDB; height: 25px; margin-top: 2px; width: 100%; color: #9C9C9C; padding-left: 5px;"
-             onfocus="this.style.outline = '1px solid #5054DD'"
-             onblur="this.style.outline = 'none';" required>
-               <option value="none" selected disabled>
-                 Company Type
-               </option>
-               <option value="bank">Bank</option>
-               <option value="insurance">Insurance</option>
-             </select>
-           </div>
-           <div class="btn-section" style="display: flex; gap: 20px; justify-content: space-evenly; width: 100%; margin-top: 5px">
-             <button  style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #5054DD; color: white;  font-size: 12px;" type="submit">Submit</button>
-             <button style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #F5F5F5; font-size: 12px;"  onclick="resetForm('customer')">Reset</button>
-           </div>
-         </form>
-       </div>
-   
-       <div id="vendor-form-container"  style="display: none; position: fixed; bottom: 10px; right: 10px; background-color: white; border-radius: 15px; box-shadow: 3px 3px 6px #0000001F; border: 1px solid #ddd; max-width: 200px; max-height: 500px; padding: 15px; font-size: 14px;">
-         <button class="form-cancel-btn" style="position: absolute; top: 6px; right: 6px; border-radius: 100%; height: 25px; width: 25px; cursor: pointer; border: 1px solid #D4D4D4; background-color: white;" onclick="closeForm('vendor')">
-           x
-         </button>
-         <p class="form-title" style="margin: 0px; font-weight: bold; font-size: 14px; padding: 0px;">Enter vendor details</p>
-         <form style="display: flex; flex-direction: column; gap: 10px; font-size: 12px; font-weight: 400; margin-top: 10px;" onsubmit="submitVendorDetails(event)">
-           <div>
-             <label for="vendorname">Enter Your Name</label>
-             <input
-               type="text"
-               id="vendorname"
-               name="vendorname"
-               style="border-radius: 6px; border: 1px solid #DBDBDB; height: 20px; margin-top: 2px; width: 100%; padding-left: 5px;"
-               onfocus="this.style.outline = '1px solid #5054DD'"
-               onblur="this.style.outline = 'none';"
-               required
-             />
-           </div>
-           <div>
-             <label for="vendoremail">Enter Your Email</label>
-             <input
-               type="email"
-               id="vendoremail"
-               name="vendoremail"
-               style="border-radius: 6px; border: 1px solid #DBDBDB; height: 20px; margin-top: 2px; width: 100%; padding-left: 5px;"
-               onfocus="this.style.outline = '1px solid #5054DD'"
-               onblur="this.style.outline = 'none';"
-               required
-             />
-           </div>
-           <div>
-             <label for="choose-company-type">Select Company Type</label>
-             <select name="choose-company-type" id="choose-company-type" style="border-radius: 6px; border: 1px solid #DBDBDB; height: 25px; margin-top: 2px; width: 100%; color: #9C9C9C; padding-left: 5px;"
-             onfocus="this.style.outline = '1px solid #5054DD'"
-             onblur="this.style.outline = 'none';" required>
-               <option value="none" selected disabled>
-                 Company Type
-               </option>
-               <option value="bank">Bank</option>
-               <option value="insurance">Insurance</option>
-             </select>
-           </div>
-           <div>
-             <label for="companyname">Enter Your Company Name</label>
-             <input
-               type="text"
-               id="companyname"
-               name="companyname"
-               style="border-radius: 6px; border: 1px solid #DBDBDB; height: 20px; margin-top: 2px; width: 100%; padding-left: 5px;"
-               onfocus="this.style.outline = '1px solid #5054DD'"
-               onblur="this.style.outline = 'none';"
-               required
-             />
-           </div>
-           <div>
-             <label for="vendorcontact">Enter Your Contact Number</label>
-             <input
-               type="tel"
-               id="vendorcontact"
-               name="vendorcontact"
-               style="border-radius: 6px; border: 1px solid #DBDBDB; height: 20px; margin-top: 2px; width: 100%; padding-left: 5px;"
-               onfocus="this.style.outline = '1px solid #5054DD'"
-               onblur="this.style.outline = 'none';"
-               required
-             />
-           </div>
-           <div>
-             <label for="companyaddress">Company Address:</label>
-             <textarea name="companyaddress" id="companyaddress" style="border-radius: 6px; border: 1px solid #DBDBDB; height: 50px; margin-top: 2px; width: 100%; padding-left: 5px;"
-             onfocus="this.style.outline = '1px solid #5054DD'"
-             onblur="this.style.outline = 'none';"></textarea>
-           </div>
-           <div class="btn-section" style="display: flex; gap: 20px; justify-content: space-between; width: 100%;">
-             <button style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #5054DD; color: white; font-size: 12px;" type="submit">Submit</button>
-             <button style="border: none; border-radius: 20px; width: 120px; height: 25px; cursor: pointer; background-color: #F5F5F5; font-size: 12px;" onclick="resetForm('vendor')">Reset</button>
-           </div>
-         </form>
-       </div>
-   
-       <div id="vendor-notification">
-      
-     </div>
-     </div>
+        id="vendor-popup"
+        style="
+          width: 250px;
+          max-height: 200px;
+          color: #000000;
+          background-color: white;
+          border-radius: 12px;
+          box-shadow: 3px 3px 6px #0000001f;
+          border: 1px solid #ddd;
+          position: fixed;
+          bottom: 10px;
+          right: 10px;
+          display: none;
+          flex-direction: column;
+          align-items: center;
+          padding: 15px;
+        "
+      >
+      <p
+          style="font-size: 14px; font-weight: bold; margin: 0px; padding: 0px"
+        >
+          Would you like to search near my vendor?
+        </p>
+        <div
+          class="btn-section"
+          style="
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+            margin-top: 10px;
+            gap: 20px;
+            font-size: 12px;
+          "
+        >
+          <button
+            style="
+              border: none;
+              border-radius: 20px;
+              width: 120px;
+              height: 25px;
+              cursor: pointer;
+              background-color: #5054dd;
+              color: white;
+            "
+            onclick="openForm()"
+          >
+            Yes
+          </button>
+          <button
+            style="
+              border: none;
+              border-radius: 20px;
+              width: 120px;
+              height: 25px;
+              cursor: pointer;
+              background-color: #f5f5f5;
+            "
+            onclick="closePopup()"
+          >
+            No
+          </button>
+        </div>
+      </div>
 
-    <div id="map-view" style="position: fixed; left: 10px; bottom: 10px; display: none;">
+      <div
+        id="usertype-selection-container"
+        style="
+          display: none;
+          flex-direction: column;
+          width: 250px;
+          height: 110px;
+          background-color: white;
+          border-radius: 12px;
+          box-shadow: 3px 3px 6px #0000001f;
+          border: 1px solid #ddd;
+          position: fixed;
+          bottom: 10px;
+          right: 10px;
+          padding: 15px;
+          justify-content: space-between;
+        "
+      >
+        <p
+          style="font-size: 14px; font-weight: bold; margin: 0px; padding: 0px"
+          >
+          Select your user category
+        </p>
+        <div class="radio-btn-container" style="display: flex; gap: 70px">
+          <div class="usertype-radio-btn" style="display: flex; gap: 3px">
+            <input
+              type="radio"
+              id="customer"
+              name="usertype"
+              value="customer"
+              required
+              style="width: 12px; height: 16px"
+            />
+            <label for="customer" style="font-weight: 500; font-size: 12px"
+              >Customer</label
+            >
+          </div>
+          <div class="usertype-radio-btn" style="display: flex; gap: 3px">
+            <input
+            type="radio"
+              id="vendor"
+              name="usertype"
+              value="vendor"
+              required
+              style="width: 12px; height: 16px"
+            />
+            <label for="vendor" style="font-weight: 500; font-size: 12px"
+              >Vendor</label
+            >
+          </div>
+        </div>
+
+        <div
+        class="btn-section"
+          style="
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 12px;
+            gap: 20px;
+          "
+        >
+          <button
+            style="
+              border: none;
+              border-radius: 20px;
+              width: 120px;
+              height: 25px;
+              cursor: pointer;
+              background-color: #5054dd;
+              color: white;
+            "
+            onclick="submitUserType()"
+          >
+            Submit
+          </button>
+          <button
+            style="
+              border: none;
+              border-radius: 20px;
+              width: 120px;
+              height: 25px;
+              cursor: pointer;
+              background-color: #f5f5f5;
+            "
+            onclick="closeUserType()"
+            >
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="customer-form-container"
+        style="
+          display: none;
+          position: fixed;
+          bottom: 10px;
+          right: 10px;
+          background-color: white;
+          border-radius: 15px;
+          box-shadow: 3px 3px 6px #0000001f;
+          border: 1px solid #ddd;
+          max-width: 200px;
+          max-height: 400px;
+          padding: 15px;
+          font-size: 14px;
+        "
+      >
+      <button
+          class="form-cancel-btn"
+          style="
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            border-radius: 100%;
+            height: 25px;
+            width: 25px;
+            cursor: pointer;
+            border: 1px solid #d4d4d4;
+            background-color: white;
+          "
+          onclick="closeForm('customer')"
+        >
+          x
+        </button>
+        <p
+          class="form-title"
+          style="margin: 0px; font-weight: bold; font-size: 14px; padding: 0px"
+        >
+          Enter customer details
+        </p>
+        <form
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 400;
+            margin-top: 10px;
+          "
+          onsubmit="submitUserDetails(event)"
+        >
+          <div>
+            <label for="username" style="font-size: 12px"
+              >Enter your Name</label
+            >
+            <input
+              type="text"
+              id="username"
+              name="username"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 20px;
+                margin-top: 2px;
+                width: 100%;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            />
+          </div>
+          <div>
+            <label for="useremail">Enter your Email</label>
+            <input
+              type="email"
+              id="useremail"
+              name="useremail"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 20px;
+                margin-top: 2px;
+                width: 100%;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            />
+          </div>
+          <div>
+            <label for="choose-vendor">Select Company Type</label>
+            <select
+              name="choose-vendor"
+              id="choose-vendor"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 25px;
+                margin-top: 2px;
+                width: 100%;
+                color: #9c9c9c;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            >
+              <option value="none" selected disabled>Company Type</option>
+              <option value="bank">Bank</option>
+              <option value="insurance">Insurance</option>
+            </select>
+          </div>
+          <div
+            class="btn-section"
+            style="
+              display: flex;
+              gap: 20px;
+              justify-content: space-evenly;
+              width: 100%;
+              margin-top: 5px;
+            "
+          >
+            <button
+              style="
+                border: none;
+                border-radius: 20px;
+                width: 120px;
+                height: 25px;
+                cursor: pointer;
+                background-color: #5054dd;
+                color: white;
+                font-size: 12px;
+              "
+              type="submit"
+            >
+              Submit
+            </button>
+            <button
+              style="
+                border: none;
+                border-radius: 20px;
+                width: 120px;
+                height: 25px;
+                cursor: pointer;
+                background-color: #f5f5f5;
+                font-size: 12px;
+              "
+              onclick="resetForm('customer')"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div
+        id="vendor-form-container"
+        style="
+          display: none;
+          position: fixed;
+          bottom: 10px;
+          right: 10px;
+          background-color: white;
+          border-radius: 15px;
+          box-shadow: 3px 3px 6px #0000001f;
+          border: 1px solid #ddd;
+          max-width: 200px;
+          max-height: 500px;
+          padding: 15px;
+          font-size: 14px;
+        "
+      >
+        <button
+          class="form-cancel-btn"
+          style="
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            border-radius: 100%;
+            height: 25px;
+            width: 25px;
+            cursor: pointer;
+            border: 1px solid #d4d4d4;
+            background-color: white;
+          "
+          onclick="closeForm('vendor')"
+        >
+          x
+        </button>
+        <p
+          class="form-title"
+          style="margin: 0px; font-weight: bold; font-size: 14px; padding: 0px"
+        >
+          Enter vendor details
+        </p>
+        <form
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 400;
+            margin-top: 10px;
+          "
+          onsubmit="submitVendorDetails(event)"
+        >
+          <div>
+            <label for="vendorname">Enter Your Name</label>
+            <input
+              type="text"
+              id="vendorname"
+              name="vendorname"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 20px;
+                margin-top: 2px;
+                width: 100%;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            />
+          </div>
+          <div>
+            <label for="vendoremail">Enter Your Email</label>
+            <input
+              type="email"
+              id="vendoremail"
+              name="vendoremail"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 20px;
+                margin-top: 2px;
+                width: 100%;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            />
+          </div>
+          <div>
+            <label for="choose-company-type">Select Company Type</label>
+            <select
+              name="choose-company-type"
+              id="choose-company-type"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 25px;
+                margin-top: 2px;
+                width: 100%;
+                color: #9c9c9c;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            >
+              <option value="none" selected disabled>Company Type</option>
+              <option value="bank">Bank</option>
+              <option value="insurance">Insurance</option>
+            </select>
+          </div>
+          <div>
+            <label for="companyname">Enter Your Company Name</label>
+            <input
+              type="text"
+              id="companyname"
+              name="companyname"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 20px;
+                margin-top: 2px;
+                width: 100%;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            />
+          </div>
+          <div>
+            <label for="vendorcontact">Enter Your Contact Number</label>
+            <input
+              type="tel"
+              id="vendorcontact"
+              name="vendorcontact"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 20px;
+                margin-top: 2px;
+                width: 100%;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+              required
+            />
+          </div>
+          <div>
+            <label for="companyaddress">Company Address:</label>
+            <textarea
+              name="companyaddress"
+              id="companyaddress"
+              style="
+                border-radius: 6px;
+                border: 1px solid #dbdbdb;
+                height: 50px;
+                margin-top: 2px;
+                width: 100%;
+                padding-left: 5px;
+              "
+              onfocus="this.style.outline = '1px solid #5054DD'"
+              onblur="this.style.outline = 'none';"
+            ></textarea>
+          </div>
+          <div
+            class="btn-section"
+            style="
+              display: flex;
+              gap: 20px;
+              justify-content: space-between;
+              width: 100%;
+            "
+          >
+            <button
+              style="
+                border: none;
+                border-radius: 20px;
+                width: 120px;
+                height: 25px;
+                cursor: pointer;
+                background-color: #5054dd;
+                color: white;
+                font-size: 12px;
+              "
+              type="submit"
+            >
+              Submit
+            </button>
+            <button
+              style="
+                border: none;
+                border-radius: 20px;
+                width: 120px;
+                height: 25px;
+                cursor: pointer;
+                background-color: #f5f5f5;
+                font-size: 12px;
+              "
+              onclick="resetForm('vendor')"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="vendor-notification"></div>
+    </div>
+
+    <div
+      id="map-view"
+      style="position: fixed; left: 10px; bottom: 10px; display: none"
+    >
       <div id="map" style="height: 350px; width: 400px"></div>
     </div>
 
