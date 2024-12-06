@@ -495,7 +495,10 @@ function submitUserDetails(e) {
       document.getElementById("map-view").style.display = "block";
       initializeMap();
     })
-    .catch((error) => console.log("Failed to retrieve location", error));
+    .catch((error) => { 
+      console.log("Failed to retrieve location", error), 
+      alert(error.message)
+    });
 }
 
 function resetForm(data) {
@@ -550,5 +553,8 @@ function submitVendorDetails(e) {
       const vendorForm = document.getElementById("vendor-form-container");
       vendorForm.style.display = "none";
     })
-    .catch((error) => console.log("Failed to retrieve location", error));
+    .catch((error) => {
+      console.log("Failed to retrieve location", error),
+      alert(error.message)
+    });
 }
